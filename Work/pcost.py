@@ -2,15 +2,16 @@
 #
 # Exercise 1.27
 import os
+import csv
 
 # os.chdir("c:/Users/MAINUSER/Desktop/교육/Python/practical-python/Work")
 
 def portfolio_cost(dir,filename):
     total_price = 0
     with open(f"{dir+filename}", "rt") as f:
-        header = next(f)
-        for line in f:
-            row = line.split(",")
+        rows = csv.reader(f)
+        header = next(rows)
+        for row in rows:
             sum_price = int(row[1]) * float(row[2])
             total_price += sum_price
     return total_price
