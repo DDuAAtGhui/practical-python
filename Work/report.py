@@ -3,7 +3,7 @@
 # Exercise 2.4
 
 import csv
-from pprint import pprint  # Pretty Print 모듈 임포트
+# from pprint import pprint  # Pretty Print 모듈 임포트
 
 pt = "C:/Users/MAINUSER/Desktop/교육/Python/practical-python/Work/Data/portfolio.csv"
 
@@ -44,7 +44,7 @@ def read_portfolio(filename):
     result = []
     with open(f"{filename}", "rt") as f:
         rows = csv.reader(f)
-        header = next(rows)
+        # header = next(rows)
         # print(f"header: {header}")
         for row in rows:
             if row:
