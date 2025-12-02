@@ -12,12 +12,16 @@ def portfolio_cost(filename):
         rows = csv.reader(f)
         header = next(rows)
         for i, row in enumerate(rows):
+            record = dict(zip(header, row))
+            print(record)
             try:
-                sum_price = int(row[1]) * float(row[2])
-                total_price += sum_price
+                shares = int(record["shares"])
+                price = float(record["price"])
+                total_price += shares * price
+                
             except ValueError:
                 print(f"Row {i} couldn't convert : {row}")
     return total_price
 
 
-print("Total Cost :::", portfolio_cost("C:/Users/user/Desktop/Workplace/개인/py/practical-python/Work/Data/missing.csv"))
+print("Total Cost :::", portfolio_cost("C:/Users/user/Desktop/Workplace/개인/py/practical-python/Work/Data/portfoliodate.csv"))
