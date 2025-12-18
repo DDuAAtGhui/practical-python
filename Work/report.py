@@ -44,8 +44,8 @@ def read_portfolio(filename):
     result = []
     with open(f"{filename}", "rt") as f:
         rows = csv.reader(f)
-        # header = next(rows)
-        # print(f"header: {header}")
+        header = next(rows)
+        print(f"header: {header}")
         for row in rows:
             if row:
                 result.append((row[0], int(row[1]), float(row[2])))
