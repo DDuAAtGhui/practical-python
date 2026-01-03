@@ -1,83 +1,55 @@
 # report.py
-#
-# Exercise 2.4
-
 import csv
-# from pprint import pprint  # Pretty Print 모듈 임포트
-
-pt = "C:/Users/MAINUSER/Desktop/교육/Python/practical-python/Work/Data/portfolio.csv"
-
-price = "C:/Users/MAINUSER/Desktop/교육/Python/practical-python/Work/Data/prices.csv"
-
-
-# def portfolio_cost(filename):
-#     portfolio = []
-#     total_cost = 0
-#     with open(f"{filename}", "rt") as f:
-#         rows = csv.reader(f)
-#         header = next(rows)  # 첫 번째 행은 헤더이므로 건너뜀
-
-#         for row in rows:
-#             portfolio.append(
-#                 {
-#                     "name": row[0],
-#                     "shares": int(row[1]),
-#                     "price": float(row[2]),
-#                 }
-#             )
-#             total_cost += int(row[1]) * float(row[2])
-#     return portfolio
-
-
-def read_price(filename):
-    result = {}
-    with open(f"{filename}", "rt") as f:
-        rows = csv.reader(f)
-        for row in rows:
-            if row:
-                result[row[0]] = float(row[1])
-    # pprint(result)
-    return result
-
 
 def read_portfolio(filename):
-    result = []
-    with open(f"{filename}", "rt") as f:
+    '''
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    '''
+    portfolio = []
+    with open(filename) as f:
         rows = csv.reader(f)
-        header = next(rows)
-        print(f"header: {header}")
+        headers = next(rows)
+
         for row in rows:
-            if row:
-                result.append((row[0], int(row[1]), float(row[2])))
+            stock = {
+                 'name'   : row[0],
+                 'shares' : int(row[1]),
+                 'price'   : float(row[2])
+            }
+            portfolio.append(stock)
 
-    # pprint(result)
-    return result
+    return portfolio
 
+def read_prices(filename):
+    '''
+    Read a CSV file of price data into a dict mapping names to prices.
+    '''
+    prices = {}
+    with open(filename) as f:
+        rows = csv.reader(f)
+        for row in rows:
+            try:
+                prices[row[0]] = float(row[1])
+            except IndexError:
+                pass
 
-def make_report(portfolio, prices):
-    report = []
-    headers = ("Name", "Shares", "Price", "Change")
-    print(f"{headers[0]:>10} {headers[1]:>10} {headers[2]:>10} {headers[3]:>10}")
-    print(
-        "-" * (len(headers[0]) + 5),
-        "-" * (len(headers[1]) + 5),
-        "-" * (len(headers[2]) + 5),
-        "-" * (len(headers[3]) + 4),
-    )
-    for name, shares, price in portfolio:
-        current_price = prices[name]
-        delta_price = current_price - price
-        report.append((name, shares, current_price, round(delta_price, 4)))
-        print(
-            f"{name:>10} {shares:>10} {f'$ {current_price}':>10} {delta_price:>10.4f}"
-        )
+    return prices
 
-    return report
+portfolio = read_portfolio('../../Work/Data/portfolio.csv')
+prices    = read_prices('../../Work/Data/prices.csv')
 
+# Calculate the total cost of the portfolio
+total_cost = 0.0
+for s in portfolio:
+    total_cost += s['shares']*s['price']
 
-# print("========== prices ========= ")
-prices = read_price(price)
+print('Total cost', total_cost)
 
-read_portfolio(pt)
+# Compute the current value of the portfolio
+total_value = 0.0
+for s in portfolio:
+    total_value += s['shares']*prices[s['name']]
 
-make_report(read_portfolio(pt), prices)
+print('Current value', total_value)
+print('Gain', total_value - total_cost)
